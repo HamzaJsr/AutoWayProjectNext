@@ -9,7 +9,7 @@ export default function AddCarForm() {
   const [color, setColor] = useState("");
   const [engineType, setEngineType] = useState("");
   const [nbrDoor, setNbrDoor] = useState("");
-  const [photo, setPhoto] = useState("");
+  const [photoFile, setPhotoFile] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -29,10 +29,18 @@ export default function AddCarForm() {
     }
 
     // Validate input
-    if (!brand || !model || !color || !engineType || !nbrDoor || !photo) {
+    if (!brand || !model || !color || !engineType || !nbrDoor || !photoFile) {
       setError("Tous les champs sont obligatoires");
       return;
     }
+
+    const formData = new FormData(); // Using FormData for file upload
+    formData.append("brand", brand);
+    formData.append("model", model);
+    formData.append("color", color);
+    formData.append("engineType", engineType);
+    formData.append("nbrDoor", nbrDoor);
+    formData.append("photo", photoFile); // File
 
     try {
       const response = await fetch("/api/cars", {
@@ -41,14 +49,7 @@ export default function AddCarForm() {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`, // Include the token in the request headers
         },
-        body: JSON.stringify({
-          brand,
-          model,
-          color,
-          engineType,
-          nbrDoor: parseInt(nbrDoor),
-          photo,
-        }),
+        body: formData,
       });
 
       if (response.ok) {
@@ -59,7 +60,7 @@ export default function AddCarForm() {
         setColor("");
         setEngineType("");
         setNbrDoor("");
-        setPhoto("");
+        setPhotoFile("");
       } else {
         const data = await response.json();
         setError(data.error || "Une erreur est survenue");
@@ -203,16 +204,16 @@ export default function AddCarForm() {
         </div>
 
         <div>
-          <label htmlFor="photo" className="block font-medium text-gray-700">
-            Photo URL
+          <label className="block font-medium text-gray-700">
+            Photo
+            <input
+              type="file"
+              accept="image/*"
+              value={photoFile}
+              onChange={(e) => setPhotoFile(e.target.value)}
+              className="mt-1 block w-full rounded-md border border-gray-300 p-2"
+            />
           </label>
-          <input
-            type="text"
-            id="photo"
-            value={photo}
-            onChange={(e) => setPhoto(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-gray-300 p-2"
-          />
         </div>
 
         <button

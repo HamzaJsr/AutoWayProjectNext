@@ -11,6 +11,7 @@
   "dependencies": {
     "@nextui-org/react": "^2.4.6",
     "@nextui-org/spinner": "^2.0.33",
+    "aws-sdk": "^2.1691.0",
     "bcrypt": "^5.1.1",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.8.0",
