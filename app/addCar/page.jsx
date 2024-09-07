@@ -9,7 +9,7 @@ export default function AddCarForm() {
   const [color, setColor] = useState("");
   const [engineType, setEngineType] = useState("");
   const [nbrDoor, setNbrDoor] = useState("");
-  const [photoFile, setPhotoFile] = useState("");
+  const [photoFile, setPhotoFile] = useState(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -46,8 +46,7 @@ export default function AddCarForm() {
       const response = await fetch("/api/cars", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`, // Include the token in the request headers
+          Authorization: `Bearer ${token}`, // Include the token in the request headers
         },
         body: formData,
       });
@@ -60,7 +59,7 @@ export default function AddCarForm() {
         setColor("");
         setEngineType("");
         setNbrDoor("");
-        setPhotoFile("");
+        setPhotoFile(null);
       } else {
         const data = await response.json();
         setError(data.error || "Une erreur est survenue");
@@ -210,7 +209,7 @@ export default function AddCarForm() {
               type="file"
               accept="image/*"
               value={photoFile}
-              onChange={(e) => setPhotoFile(e.target.value)}
+              onChange={(e) => setPhotoFile(e.target.files[0])}
               className="mt-1 block w-full rounded-md border border-gray-300 p-2"
             />
           </label>

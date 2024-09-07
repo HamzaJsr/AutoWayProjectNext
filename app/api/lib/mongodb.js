@@ -20,6 +20,7 @@ if (process.env.NODE_ENV === "development") {
     global._mongoClientPromise = client.connect();
   }
   clientPromise = global._mongoClientPromise;
+  console.log("BDD connected");
 } else {
   // En mode production, créez une nouvelle connexion
   client = new MongoClient(uri, options);
