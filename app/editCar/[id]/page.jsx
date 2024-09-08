@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
 "use client";
 import React, { useState, useEffect } from "react";
@@ -18,8 +19,39 @@ const EditCar = ({ params }) => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
+    const token = localStorage.getItem("token"); // Suppose que le token est stocké dans localStorage
+    const fetchUser = async () => {
+      try {
+        if (!token) {
+          setError(
+            "Vous devez être connecté pour accéder aux modification de l'annonce."
+          );
+          return;
+        }
+
+        const response = await fetch("/api/auth/me", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          setUser(data.user);
+        } else {
+          setError(data.error || "Failed to fetch user.");
+        }
+      } catch (err) {
+        console.error(err);
+        setError("Failed to fetch user.");
+      }
+    };
+
     const fetchCarDetails = async () => {
       try {
         const response = await fetch(`/api/cars/${id}`);
@@ -44,9 +76,20 @@ const EditCar = ({ params }) => {
         setLoading(false);
       }
     };
-
+    fetchUser();
     fetchCarDetails();
   }, [id]);
+
+  // Deuxième useEffect : pour vérifier si l'utilisateur peut éditer la voiture
+  useEffect(() => {
+    if (user && car) {
+      // Assurez-vous que les deux sont chargés
+      if (user.id !== car.createdBy) {
+        // Vérifie si l'utilisateur est le propriétaire de la voiture
+        setError("Vous n'êtes pas le propriétaire de cette annonce.");
+      }
+    }
+  }, [user, car]);
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -62,10 +105,13 @@ const EditCar = ({ params }) => {
     for (const key in formData) {
       form.append(key, formData[key]);
     }
-
+    const token = localStorage.getItem("token"); // Suppose que le token est stocké dans localStorage
     try {
       const response = await fetch(`/api/cars/${id}`, {
         method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the request headers
+        },
         body: form,
       });
       if (response.ok) {
@@ -89,15 +135,17 @@ const EditCar = ({ params }) => {
 
   if (error)
     return (
-      <div className="mx-auto mt-10 max-w-lg rounded-lg bg-white p-6 shadow-md">
-        <p className="text-center text-red-500">{error}</p>
-        <div className="mt-4 text-center">
-          <Link
-            href="/carList"
-            className="rounded-lg bg-blue-500 px-4 py-2 text-white shadow transition-colors hover:bg-blue-600"
-          >
-            Liste des véhicules
-          </Link>
+      <div className="flex min-h-screen items-center justify-center bg-gray-100">
+        <div className="w-full max-w-sm rounded-lg bg-white p-6 shadow-lg">
+          <p className="text-center text-red-500">{error}</p>
+          <div className="mt-4 text-center">
+            <Link
+              href="/carList"
+              className="rounded-lg bg-blue-500 px-4 py-2 text-white shadow transition-colors hover:bg-blue-600"
+            >
+              Liste des véhicules
+            </Link>
+          </div>
         </div>
       </div>
     );

@@ -113,11 +113,11 @@ export async function PUT(request, { params }) {
       });
     }
 
-    if (car.userId !== user.id) {
-      // Comparer l'ID de l'utilisateur connecté avec celui qui a créé la voiture
-      return new Response(JSON.stringify({ error: "Forbidden" }), {
-        status: 403,
-      });
+    if (car.createdBy !== user.id) {
+      return NextResponse.json(
+        { error: "Vous n'êtes pas autorisé à modifié cette annonce" },
+        { status: 403 }
+      );
     }
     //Recupérer données formulaire
     const formData = await request.formData();
@@ -129,23 +129,28 @@ export async function PUT(request, { params }) {
       if (key === "photo") {
         const photoFile = formData.get("photo");
 
-        if (photoFile) {
-          // Récupérer les informations actuelles du véhicule
-          const oldCar = await collection.findOne({ _id: new ObjectId(id) });
-
-          // Supprimer l'ancienne photo de S3
-          const oldPhotoKey = oldCar.photo.split(".com/")[1];
+        ////
+        // Si une nouvelle photo est fournie, la télécharger et supprimer l'ancienne
+        if (photoFile && photoFile.size > 0) {
+          const oldPhotoKey = car.photo?.split(".com/")[1];
           if (oldPhotoKey) {
-            await deleteFileFromS3(oldPhotoKey);
+            await deleteFileFromS3(oldPhotoKey); // Supprimer l'ancienne photo de S3
           }
-
-          // Télécharger la nouvelle photo sur S3
-          const newPhotoUrl = await uploadFileToS3(photoFile);
+          const newPhotoUrl = await uploadFileToS3(photoFile); // Uploader la nouvelle photo
           updates.photo = newPhotoUrl;
         }
+
+        /////
       } else if (value) {
         updates[key] = value;
       }
+    }
+
+    // Ne rien faire si aucun champ n'a été modifié
+    if (Object.keys(updates).length === 0) {
+      return new Response(JSON.stringify({ message: "No changes detected" }), {
+        status: 200,
+      });
     }
 
     // Mettre à jour le document dans MongoDB

@@ -53,7 +53,6 @@ const CarDetails = ({ params }) => {
 
         if (response.ok) {
           setCar(data);
-          console.log(data);
         } else {
           setError(data.error || "An error occurred");
         }
