@@ -18,9 +18,13 @@ const s3 = new S3Client({
 // Fonction pour ajouter un fichier à S3
 export const uploadFileToS3 = async (file, folder = "cars") => {
   try {
+    // Lire le fichier photo
     const fileBuffer = Buffer.from(await file.arrayBuffer());
-    const fileName = `${folder}/${Date.now()}_${file.name}`; // Générer un nom de fichier unique
+    // Générer un nom de fichier unique
+    const fileName = `${folder}/${Date.now()}_${file.name}`;
 
+    // Upload de l'image sur S3
+    // Définir les paramètres pour l'upload dans S3
     const uploadParams = {
       Bucket: process.env.AWS_S3_BUCKET,
       Key: fileName,
@@ -28,10 +32,11 @@ export const uploadFileToS3 = async (file, folder = "cars") => {
       ContentType: file.type,
       ACL: "public-read",
     };
-
+    // Créer une commande pour uploader l'objet
     const command = new PutObjectCommand(uploadParams);
+    // Envoyer la commande à S3
     await s3.send(command);
-
+    // Retourner l'URL du fichier uploadé dans la réponse
     return `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`;
   } catch (error) {
     console.error("Erreur lors de l'upload vers S3:", error);

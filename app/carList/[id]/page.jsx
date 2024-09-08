@@ -1,6 +1,6 @@
 "use client";
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -16,21 +16,6 @@ const CarDetails = ({ params }) => {
   useEffect(() => {
     const tokenFromStorage = localStorage.getItem("token"); // Suppose que le token est stocké dans localStorage
     setToken(tokenFromStorage);
-    const fetchCarDetails = async () => {
-      try {
-        const response = await fetch(`/api/cars/${id}`);
-        const data = await response.json();
-
-        if (response.ok) {
-          setCar(data);
-        } else {
-          setError(data.error || "An error occurred");
-        }
-      } catch (err) {
-        console.error(err);
-        setError("An error occurred");
-      }
-    };
 
     const fetchUser = async () => {
       try {
@@ -61,8 +46,25 @@ const CarDetails = ({ params }) => {
       }
     };
 
-    fetchCarDetails();
+    const fetchCarDetails = async () => {
+      try {
+        const response = await fetch(`/api/cars/${id}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          setCar(data);
+          console.log(data);
+        } else {
+          setError(data.error || "An error occurred");
+        }
+      } catch (err) {
+        console.error(err);
+        setError("An error occurred");
+      }
+    };
+
     fetchUser();
+    fetchCarDetails();
   }, [id]);
 
   const handleDelete = async () => {
@@ -146,12 +148,20 @@ const CarDetails = ({ params }) => {
               <strong>Nombre de portes:</strong> {car.nbrDoor}
             </p>
             {canDelete && (
-              <button
-                onClick={handleDelete}
-                className="mb-4 mr-4 rounded bg-red-500 px-4 py-2 text-white hover:bg-red-700"
-              >
-                Supprimer la voiture
-              </button>
+              <>
+                <button
+                  onClick={handleDelete}
+                  className="mb-4 mr-4 rounded bg-red-500 px-4 py-2 text-white hover:bg-red-700"
+                >
+                  Supprimer la voiture
+                </button>
+                <Link
+                  href={`/editCar/${car._id}`}
+                  className="mb-4 mr-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+                >
+                  Modifier
+                </Link>
+              </>
             )}
           </div>
         </div>

@@ -158,6 +158,7 @@
 //     </div>
 //   );
 // }
+
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
@@ -185,7 +186,7 @@ export default function LoginPage() {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem("token", data.token);
-        router.push("/");
+        router.push("/carList");
       } else {
         const data = await response.json();
         setError(data.error || "Login failed");
@@ -238,7 +239,7 @@ export default function LoginPage() {
             href="/carList"
             className="m-5 rounded-lg bg-sky-500 px-4 py-2 text-center text-white shadow transition-colors hover:bg-sky-600"
           >
-            Consulter la liste des vehicules sans vous inscription
+            Consulter la liste des vehicules sans vous inscrire
           </Link>
         </div>
       </div>

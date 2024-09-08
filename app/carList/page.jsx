@@ -73,7 +73,7 @@ export default function CarList() {
     <div className="p-6">
       <div className="flex flex-wrap items-center justify-between">
         <h2 className="mb-4 text-3xl font-bold">Listes des véhicules</h2>
-        <div className="flex items-center justify-center space-x-4">
+        <div className="flex w-full items-center justify-end space-x-4 md:w-auto">
           {isConnected ? (
             <div className="flex items-center space-x-4">
               <span className="text-lg font-semibold text-gray-600">
@@ -84,21 +84,30 @@ export default function CarList() {
               </button>
             </div>
           ) : (
-            <a href="/login">
-              <img
-                src="/connexion.png"
-                className="size-7 transition-transform duration-150 ease-in-out hover:scale-105 active:scale-95"
-                alt="connéxion"
-              />
-            </a>
+            <div>
+              <a href="/login">
+                <img
+                  src="/connexion.png"
+                  className="size-7 transition-transform duration-150 ease-in-out hover:scale-105 active:scale-95"
+                  alt="connéxion"
+                />
+              </a>
+            </div>
           )}
 
-          <Link
-            href="/addCar"
-            className="m-5 rounded-lg bg-blue-500 px-4 py-2 text-white shadow transition-colors hover:bg-blue-600"
-          >
-            Ajouter un véhicule
-          </Link>
+          <div className="flex justify-end p-5">
+            <Link
+              href="/addCar"
+              className="flex w-full max-w-xs items-center justify-center rounded-lg bg-blue-500 px-4 py-2 text-center text-white shadow transition-colors hover:bg-blue-600 sm:max-w-md sm:px-6 sm:py-3"
+            >
+              <div className="flex flex-col text-center">
+                <span className="text-xs font-medium sm:text-sm">Ajouter</span>
+                <span className="text-xs font-light sm:text-xs">
+                  un véhicule
+                </span>
+              </div>
+            </Link>
+          </div>
         </div>
       </div>
 
