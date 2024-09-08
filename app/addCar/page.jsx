@@ -208,7 +208,6 @@ export default function AddCarForm() {
             <input
               type="file"
               accept="image/*"
-              value={photoFile}
               onChange={(e) => setPhotoFile(e.target.files[0])}
               className="mt-1 block w-full rounded-md border border-gray-300 p-2"
             />

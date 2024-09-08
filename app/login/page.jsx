@@ -78,7 +78,7 @@ export default function LoginPage() {
             href="/carList"
             className="m-5 rounded-lg bg-sky-500 px-4 py-2 text-center text-white shadow transition-colors hover:bg-sky-600"
           >
-            Consulter la liste des vehicules sans vous inscription
+            Consulter la liste des vehicules sans vous inscrire
           </Link>
         </div>
       </div>

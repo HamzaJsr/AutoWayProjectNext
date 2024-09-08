@@ -66,15 +66,16 @@ export async function POST(request) {
 
     ////////
     // Lire le fichier photo
-    // const photoBuffer = Buffer.from(await photo.arrayBuffer());
+    const photoBuffer = Buffer.from(await photo.arrayBuffer());
 
     // Upload de l'image sur S3
     // Définir les paramètres pour l'upload dans S3
     const uploadParams = {
       Bucket: process.env.AWS_S3_BUCKET,
       Key: `cars/${Date.now()}_${photo.name}`, // Nom unique pour le fichier sur S3
-      Body: photo.stream(), // Corps du fichier à envoyer en stream
-      ContentType: photo.type, // Type MIME du fichier
+      Body: photoBuffer, // Corps du fichier à envoyer en stream
+      ContentType: photo.type, // Type MIME du fichierS
+      ACL: "public-read", // ACL pour rendre l'objet public
     };
 
     // const photoUrl = uploadResponse.Location;
@@ -115,8 +116,8 @@ export async function POST(request) {
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Error uploading car" }, { status: 500 });
-  } finally {
-    // Assurer la fermeture de la connexion
-    await client.close();
+    // } finally {
+    //   // Assurer la fermeture de la connexion
+    //   await client.close();
   }
 }
