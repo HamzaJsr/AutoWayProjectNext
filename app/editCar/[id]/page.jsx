@@ -128,7 +128,7 @@ const EditCar = ({ params }) => {
   };
 
   const handleBack = () => {
-    router.push(`/carList`);
+    router.push(`/carList/${id}`);
   };
 
   if (loading) return <p className="text-center">Loading...</p>;
@@ -159,7 +159,7 @@ const EditCar = ({ params }) => {
           onClick={handleBack}
           className="rounded-lg bg-gray-500 px-4 py-2 text-white shadow transition-colors hover:bg-gray-600"
         >
-          Retour à la liste
+          ↩️
         </button>
       </div>
       <form onSubmit={handleSubmit} className="space-y-4">

@@ -81,6 +81,7 @@ export async function DELETE(request, { params }) {
   );
 }
 
+// Met à jour une voiture existante avec son ID
 export async function PUT(request, { params }) {
   const { id } = params;
 
@@ -105,12 +106,10 @@ export async function PUT(request, { params }) {
     const db = client.db("MyFirstDBForLearn");
     const collection = db.collection("cars");
 
-    // 3. Récupérer la voiture pour vérifier si l'utilisateur est bien l'auteur
+    // Récupérer la voiture pour vérifier si l'utilisateur est bien l'auteur
     const car = await collection.findOne({ _id: new ObjectId(id) });
     if (!car) {
-      return new Response(JSON.stringify({ error: "Car not found" }), {
-        status: 404,
-      });
+      return NextResponse.json({ error: "Car not found" }, { status: 404 });
     }
 
     if (car.createdBy !== user.id) {
@@ -119,9 +118,10 @@ export async function PUT(request, { params }) {
         { status: 403 }
       );
     }
-    //Recupérer données formulaire
+
+    // Récupérer données formulaire
     const formData = await request.formData();
-    //Creation d'un objet vide pour y integrer les nouvelles data du nouveau formulaire de modification
+    // Création d'un objet vide pour y intégrer les nouvelles données du formulaire de modification
     const updates = {};
 
     // Traiter les champs du formulaire
@@ -129,7 +129,6 @@ export async function PUT(request, { params }) {
       if (key === "photo") {
         const photoFile = formData.get("photo");
 
-        ////
         // Si une nouvelle photo est fournie, la télécharger et supprimer l'ancienne
         if (photoFile && photoFile.size > 0) {
           const oldPhotoKey = car.photo?.split(".com/")[1];
@@ -139,8 +138,6 @@ export async function PUT(request, { params }) {
           const newPhotoUrl = await uploadFileToS3(photoFile); // Uploader la nouvelle photo
           updates.photo = newPhotoUrl;
         }
-
-        /////
       } else if (value) {
         updates[key] = value;
       }
@@ -148,21 +145,20 @@ export async function PUT(request, { params }) {
 
     // Ne rien faire si aucun champ n'a été modifié
     if (Object.keys(updates).length === 0) {
-      return new Response(JSON.stringify({ message: "No changes detected" }), {
-        status: 200,
-      });
+      return NextResponse.json(
+        { message: "No changes detected" },
+        { status: 200 }
+      );
     }
 
     // Mettre à jour le document dans MongoDB
     await collection.updateOne({ _id: new ObjectId(id) }, { $set: updates });
-    return new Response(
-      JSON.stringify({ message: "Car updated successfully" }),
+    return NextResponse.json(
+      { message: "Car updated successfully" },
       { status: 200 }
     );
   } catch (error) {
     console.error(error);
-    return new Response(JSON.stringify({ error: "Error updating car" }), {
-      status: 500,
-    });
+    return NextResponse.json({ error: "Error updating car" }, { status: 500 });
   }
 }
