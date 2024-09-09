@@ -80,7 +80,7 @@ const CarDetails = ({ params }) => {
         console.log(response);
 
         alert("Voiture supprimée avec succès");
-        router.push("/carList"); // Redirige vers la liste des voitures après suppression
+        router.push("/"); // Redirige vers la liste des voitures après suppression
       } else {
         const data = await response.json();
         alert(data.error || "An error occurred");
