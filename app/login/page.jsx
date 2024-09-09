@@ -4,6 +4,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -38,7 +39,16 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100 px-4">
       <div className="w-full max-w-lg space-y-6 rounded-lg bg-white p-8 shadow-md sm:max-w-md ">
-        <h2 className="text-center text-3xl font-bold">Connexion</h2>
+        <div className="flex items-center justify-center">
+          <Image
+            src="/icons8-voiture-96.png"
+            width={50}
+            height={50}
+            alt="logo"
+          ></Image>
+          <h2 className="ml-3 text-center text-3xl font-bold">Connexion</h2>
+        </div>
+
         {error && <p className="text-red-500">{error}</p>}
 
         <form onSubmit={handleLogin} className="space-y-4">

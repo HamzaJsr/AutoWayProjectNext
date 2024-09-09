@@ -3,6 +3,7 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { Spinner } from "@nextui-org/react";
+import Image from "next/image";
 
 export default function CarList() {
   const [cars, setCars] = useState([]);
@@ -72,7 +73,16 @@ export default function CarList() {
   return (
     <div className="p-6">
       <div className="flex flex-wrap items-center justify-between">
-        <h2 className="mb-4 text-3xl font-bold">Listes des véhicules</h2>
+        <div className="flex items-center justify-between ">
+          <Image
+            src="/icons8-voiture-96.png"
+            width={50}
+            height={50}
+            alt="logo"
+          ></Image>
+          <h2 className="mb-4 text-3xl font-bold">Listes des véhicules</h2>
+        </div>
+
         <div className="flex w-full items-center justify-end space-x-4 md:w-auto">
           {isConnected ? (
             <div className="flex items-center space-x-4">
