@@ -293,7 +293,7 @@ const EditCar = ({ params }) => {
 
         <div>
           <label htmlFor="price" className="block font-medium text-gray-700">
-            Prix
+            Prix €
           </label>
           <input
             type="number"
