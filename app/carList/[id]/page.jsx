@@ -92,7 +92,7 @@ const CarDetails = ({ params }) => {
   };
 
   const handleBack = () => {
-    router.push("/carList"); // Retourne à la liste des voitures
+    router.push("/"); // Retourne à la liste des voitures
   };
 
   if (error)
@@ -102,7 +102,7 @@ const CarDetails = ({ params }) => {
           <p className="text-center text-red-500">{error}</p>
           <div className="mt-4 text-center">
             <Link
-              href="/carList"
+              href="/"
               className="rounded-lg bg-blue-500 px-4 py-2 text-white shadow transition-colors hover:bg-blue-600"
             >
               Liste des véhicules
@@ -137,6 +137,9 @@ const CarDetails = ({ params }) => {
           />
 
           <div className="text-center text-lg text-gray-700">
+            <p className="mb-2">
+              <strong>Prix:</strong> {car.price}€
+            </p>
             <p className="mb-2">
               <strong>Couleur:</strong> {car.color}
             </p>

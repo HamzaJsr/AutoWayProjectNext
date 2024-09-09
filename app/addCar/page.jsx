@@ -10,6 +10,7 @@ export default function AddCarForm() {
   const [nbrDoor, setNbrDoor] = useState("");
   const [photoFile, setPhotoFile] = useState(null);
   const [description, setDescription] = useState(""); // Nouvel état pour la description
+  const [price, setPrice] = useState(""); // Nouvel état pour le prix
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false); // État pour gérer l'authentification
@@ -47,7 +48,8 @@ export default function AddCarForm() {
       !engineType ||
       !nbrDoor ||
       !photoFile ||
-      !description
+      !description ||
+      !price // Validate that price is not empty
     ) {
       setError("Tous les champs sont obligatoires");
       return;
@@ -61,6 +63,7 @@ export default function AddCarForm() {
     formData.append("nbrDoor", nbrDoor);
     formData.append("photo", photoFile); // File
     formData.append("description", description); // Description
+    formData.append("price", price); // Append price to FormData
 
     try {
       const response = await fetch("/api/cars", {
@@ -81,6 +84,7 @@ export default function AddCarForm() {
         setNbrDoor("");
         setPhotoFile(null);
         setDescription(""); // Reset description
+        setPrice(""); // Reset price
       } else {
         const data = await response.json();
         setError(data.error || "Une erreur est survenue");
@@ -96,7 +100,7 @@ export default function AddCarForm() {
       <div className="flex justify-between">
         <h2 className="mb-4 text-2xl font-bold">Ajouter un véhicule</h2>
         <Link
-          href="/carList"
+          href="/"
           className="m-5 rounded-lg bg-blue-500 px-4 py-2 text-white shadow transition-colors hover:bg-blue-600"
         >
           Liste des véhicules
@@ -253,16 +257,28 @@ export default function AddCarForm() {
             ></textarea>
           </div>
 
+          {/* Champ de prix */}
           <div>
-            <label className="block font-medium text-gray-700">
-              Photo
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => setPhotoFile(e.target.files[0])}
-                className="mt-1 block w-full rounded-md border border-gray-300 p-2"
-              />
+            <label htmlFor="price" className="block font-medium text-gray-700">
+              Prix €
             </label>
+            <input
+              type="number"
+              id="price"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              className="mt-1 block w-full rounded-md border border-gray-300 p-2"
+            />
+          </div>
+
+          <div>
+            <label className="block font-medium text-gray-700">Photo</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setPhotoFile(e.target.files[0])}
+              className="mt-1 block w-full rounded-md border border-gray-300 p-2"
+            />
           </div>
 
           <button

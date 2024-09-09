@@ -16,7 +16,8 @@ const EditCar = ({ params }) => {
     engineType: "",
     nbrDoor: "",
     photo: null,
-    description: "", // Added description field
+    description: "",
+    price: "",
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -67,6 +68,7 @@ const EditCar = ({ params }) => {
             nbrDoor: data.nbrDoor,
             photo: data.photo,
             description: data.description,
+            price: data.price,
           });
         } else {
           setError(data.error || "An error occurred");
@@ -286,6 +288,21 @@ const EditCar = ({ params }) => {
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border border-gray-300 p-2"
             rows="4"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="price" className="block font-medium text-gray-700">
+            Prix
+          </label>
+          <input
+            type="number"
+            id="price"
+            name="price"
+            value={formData.price}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border border-gray-300 p-2"
+            step="0.01" // Permet les décimales
           />
         </div>
 

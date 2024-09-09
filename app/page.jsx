@@ -73,14 +73,14 @@ export default function CarList() {
   return (
     <div className="p-6">
       <div className="flex flex-wrap items-center justify-between">
-        <div className="flex items-center justify-between ">
+        <div className="flex items-center justify-center ">
           <Image
             src="/icons8-voiture-96.png"
             width={50}
             height={50}
             alt="logo"
           ></Image>
-          <h2 className="mb-4 text-3xl font-bold">Listes des véhicules</h2>
+          <h2 className="mb-4  text-3xl font-bold">Listes des véhicules</h2>
         </div>
 
         <div className="flex w-full items-center justify-end space-x-4 md:w-auto">
@@ -140,12 +140,23 @@ export default function CarList() {
                 alt={car.model}
                 className="mb-4 h-40 w-full rounded object-cover"
               />
-              <h3 className="text-xl font-semibold">
-                {car.brand} {car.model}
-              </h3>
-              <p className="text-gray-600">Couleur: {car.color}</p>
-              <p className="text-gray-600">Motorisation: {car.engineType}</p>
-              <p className="text-gray-600">Nombre de porte: {car.nbrDoor}</p>
+              <div className="flex justify-between">
+                <div className="flex-1">
+                  <h3 className="text-xl font-semibold">
+                    {car.brand} {car.model}
+                  </h3>
+                  <p className="text-gray-600">Couleur: {car.color}</p>
+                  <p className="text-gray-600">
+                    Motorisation: {car.engineType}
+                  </p>
+                  <p className="text-gray-600">
+                    Nombre de porte: {car.nbrDoor}
+                  </p>
+                </div>
+                <div className="ml-4 flex-none">
+                  <p className="text-xl font-semibold">{car.price}€</p>
+                </div>
+              </div>
             </Link>
           ))
         )}
