@@ -11,6 +11,7 @@ export default function CarList() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(""); // State pour la recherche
 
   useEffect(() => {
     async function fetchCars() {
@@ -30,9 +31,8 @@ export default function CarList() {
 
     const fetchUser = async () => {
       try {
-        const token = localStorage.getItem("token"); // Suppose que le token est stocké dans localStorage
+        const token = localStorage.getItem("token");
         if (token) {
-          //   Si il n'y a pas de token c'est que il n'y a pas de user connecter donc il faut afficher un bouton connextion
           setIsConnected(true);
         }
 
@@ -70,6 +70,13 @@ export default function CarList() {
     }
   };
 
+  // Filtrer les voitures en fonction de la recherche
+  const filteredCars = cars.filter(
+    (car) =>
+      car.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      car.model.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="p-6">
       <div className="flex flex-wrap items-center justify-between">
@@ -79,8 +86,8 @@ export default function CarList() {
             width={50}
             height={50}
             alt="logo"
-          ></Image>
-          <h2 className="mb-4  text-3xl font-bold">Listes des véhicules</h2>
+          />
+          <h2 className="mb-4 text-3xl font-bold">Listes des véhicules</h2>
         </div>
 
         <div className="flex w-full items-center justify-end space-x-4 md:w-auto">
@@ -121,15 +128,26 @@ export default function CarList() {
         </div>
       </div>
 
+      {/* Champ de recherche */}
+      <div className="mt-4">
+        <input
+          type="text"
+          placeholder="Rechercher une voiture (Marque ou Modèle)"
+          className="w-full rounded-md border border-gray-300 p-2"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
       {error && <p className="mb-4 text-red-500">{error}</p>}
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {loading ? (
           <Spinner />
-        ) : cars.length === 0 ? (
-          <p className="text-gray-500">No cars available.</p>
+        ) : filteredCars.length === 0 ? (
+          <p className="text-gray-500">Aucun véhicule trouvé.</p>
         ) : (
-          cars.map((car) => (
+          filteredCars.map((car) => (
             <Link
               className="rounded border bg-white p-4 shadow-md hover:bg-gray-100"
               key={car._id}
@@ -160,7 +178,6 @@ export default function CarList() {
             </Link>
           ))
         )}
-        {}
       </div>
     </div>
   );
