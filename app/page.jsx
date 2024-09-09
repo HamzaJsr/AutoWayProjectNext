@@ -129,11 +129,11 @@ export default function CarList() {
       </div>
 
       {/* Champ de recherche */}
-      <div className="mt-4">
+      <div className="mt-4 flex justify-center">
         <input
           type="text"
           placeholder="Rechercher une voiture (Marque ou Modèle)"
-          className="w-full rounded-md border border-gray-300 p-2"
+          className="w-full max-w-xs rounded-md border border-gray-300 p-2 md:max-w-md"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
