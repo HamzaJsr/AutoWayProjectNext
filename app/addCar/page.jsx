@@ -10,6 +10,7 @@ export default function AddCarForm() {
   const [engineType, setEngineType] = useState("");
   const [nbrDoor, setNbrDoor] = useState("");
   const [photoFile, setPhotoFile] = useState(null);
+  const [description, setDescription] = useState(""); // Nouvel état pour la description
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -29,7 +30,15 @@ export default function AddCarForm() {
     }
 
     // Validate input
-    if (!brand || !model || !color || !engineType || !nbrDoor || !photoFile) {
+    if (
+      !brand ||
+      !model ||
+      !color ||
+      !engineType ||
+      !nbrDoor ||
+      !photoFile ||
+      !description
+    ) {
       setError("Tous les champs sont obligatoires");
       return;
     }
@@ -41,6 +50,7 @@ export default function AddCarForm() {
     formData.append("engineType", engineType);
     formData.append("nbrDoor", nbrDoor);
     formData.append("photo", photoFile); // File
+    formData.append("description", description); // Description
 
     try {
       const response = await fetch("/api/cars", {
@@ -60,6 +70,7 @@ export default function AddCarForm() {
         setEngineType("");
         setNbrDoor("");
         setPhotoFile(null);
+        setDescription(""); // Reset description
       } else {
         const data = await response.json();
         setError(data.error || "Une erreur est survenue");
@@ -202,6 +213,23 @@ export default function AddCarForm() {
           </div>
         </div>
 
+        {/* Champ de description */}
+        <div>
+          <label
+            htmlFor="description"
+            className="block font-medium text-gray-700"
+          >
+            Description
+          </label>
+          <textarea
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="mt-1 block w-full rounded-md border border-gray-300 p-2"
+            rows="4"
+          ></textarea>
+        </div>
+
         <div>
           <label className="block font-medium text-gray-700">
             Photo
@@ -218,7 +246,7 @@ export default function AddCarForm() {
           type="submit"
           className="w-full rounded-md bg-blue-500 py-2 font-semibold text-white hover:bg-blue-600"
         >
-          Add Car
+          Ajouter Voiture
         </button>
       </form>
     </div>

@@ -127,7 +127,7 @@ export async function PUT(request, { params }) {
     // Traiter les champs du formulaire
     for (const [key, value] of formData.entries()) {
       if (key === "photo") {
-        const photoFile = formData.get("photo");
+        const photoFile = value;
 
         // Si une nouvelle photo est fournie, la télécharger et supprimer l'ancienne
         if (photoFile && photoFile.size > 0) {

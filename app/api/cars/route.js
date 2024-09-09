@@ -49,6 +49,7 @@ export async function POST(request) {
     const engineType = formData.get("engineType");
     const nbrDoor = parseInt(formData.get("nbrDoor"), 10);
     const photo = formData.get("photo");
+    const description = formData.get("description");
 
     if (!photo) {
       return NextResponse.json({ error: "Photo is required" }, { status: 400 });
@@ -68,6 +69,7 @@ export async function POST(request) {
       color,
       engineType,
       nbrDoor,
+      description,
       photo: photoUrl,
       createdBy: user.id,
     };
