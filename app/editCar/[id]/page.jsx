@@ -16,6 +16,7 @@ const EditCar = ({ params }) => {
     engineType: "",
     nbrDoor: "",
     photo: null,
+    description: "", // Added description field
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -65,6 +66,7 @@ const EditCar = ({ params }) => {
             engineType: data.engineType,
             nbrDoor: data.nbrDoor,
             photo: data.photo,
+            description: data.description,
           });
         } else {
           setError(data.error || "An error occurred");
@@ -80,12 +82,9 @@ const EditCar = ({ params }) => {
     fetchCarDetails();
   }, [id]);
 
-  // Deuxième useEffect : pour vérifier si l'utilisateur peut éditer la voiture
   useEffect(() => {
     if (user && car) {
-      // Assurez-vous que les deux sont chargés
       if (user.id !== car.createdBy) {
-        // Vérifie si l'utilisateur est le propriétaire de la voiture
         setError("Vous n'êtes pas le propriétaire de cette annonce.");
       }
     }
@@ -271,6 +270,23 @@ const EditCar = ({ params }) => {
               />
             </label>
           </div>
+        </div>
+
+        <div>
+          <label
+            htmlFor="description"
+            className="block font-medium text-gray-700"
+          >
+            Description
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border border-gray-300 p-2"
+            rows="4"
+          />
         </div>
 
         <div>

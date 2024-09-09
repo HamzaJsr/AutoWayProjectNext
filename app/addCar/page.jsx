@@ -89,7 +89,7 @@ export default function AddCarForm() {
           href="/carList"
           className="m-5 rounded-lg bg-blue-500 px-4 py-2 text-white shadow transition-colors hover:bg-blue-600"
         >
-          Liste des voitures
+          Liste des véhicules
         </Link>
       </div>
       {error && (
